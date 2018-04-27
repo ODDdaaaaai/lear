@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="toDoItem"
+            type="sy.soya.lear.models.ToDoItem"/>
+        <variable
+            name="clickHandler"
+            type="sy.soya.lear.ui.adapters.ToDoAdapter.ToDoViewHolder"/>
+    </data>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:id="@+id/item"
@@ -8,13 +17,14 @@
     android:paddingRight="16dp"
     android:paddingTop="8dp"
     android:clickable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:onClick="@{clickHandler::onItemClick}">
 
     <TextView
         android:id="@+id/text_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
+        android:text="@{toDoItem.title, default = `Title`}"
         android:textColor="@android:color/black"
         android:textSize="16sp"/>
 
@@ -23,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:text="Completed"
+        android:text="@{toDoItem.completed ? `Completed` : `Incomplete`, default = `Status`}"
         android:layout_marginTop="8dp"/>
 
     <View
@@ -33,3 +43,4 @@
         android:layout_marginTop="8dp"/>
 
 </LinearLayout>
+</layout>

@@ -14,14 +14,14 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.ArrayList;
 
 import sy.soya.lear.R;
+import sy.soya.lear.databinding.ItemTodoBinding;
 import sy.soya.lear.models.ToDoItem;
 import sy.soya.lear.ui.activities.DetailsActivity;
 import sy.soya.lear.ui.activities.MainActivity;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>{
 
-    public static final String INTENT_EXTRA_TITLE = "INTENT_EXTRA_TITLE";
-    public static final String INTENT_EXTRA_STATUS = "INTENT_EXTRA_STATUS";
+    public static final String INTENT_EXTRA_TO_DO_ITEM = "INTENT_EXTRA_TO_DO_ITEM";
 
     private Context mContext;
     private ArrayList<ToDoItem> mToDoItems;
@@ -34,8 +34,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
     @NonNull
     @Override
     public ToDoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_todo, parent, false);
-        return new ToDoViewHolder(view);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ItemTodoBinding binding = ItemTodoBinding.inflate(layoutInflater, parent, false);
+        return new ToDoViewHolder(binding);
     }
 
     @Override
@@ -48,40 +49,28 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
         return mToDoItems.size();
     }
 
-    class ToDoViewHolder extends RecyclerView.ViewHolder{
+    public class ToDoViewHolder extends RecyclerView.ViewHolder{
 
-        View item;
-        TextView textViewTitle;
-        TextView textViewStatus;
+        private final ItemTodoBinding binding;
+        private ToDoItem toDoItem;
 
-        ToDoViewHolder(View itemView) {
-            super(itemView);
-
-            item = itemView.findViewById(R.id.item);
-            textViewTitle = itemView.findViewById(R.id.text_view_title);
-            textViewStatus = itemView.findViewById(R.id.text_view_status);
+        ToDoViewHolder(ItemTodoBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         void bind(final ToDoItem toDoItem){
-
-            textViewTitle.setText(toDoItem.getTitle());
-            if(toDoItem.isCompleted()){
-                textViewStatus.setText(mContext.getResources().getString(R.string.completed));
-                textViewStatus.setTextColor(mContext.getResources().getColor(R.color.todo_completed));
-            } else {
-                textViewStatus.setText(mContext.getResources().getString(R.string.incomplete));
-                textViewStatus.setTextColor(mContext.getResources().getColor(R.color.todo_incomplete));
-            }
-
-            item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext, DetailsActivity.class);
-                    intent.putExtra(INTENT_EXTRA_TITLE, textViewTitle.getText().toString());
-                    intent.putExtra(INTENT_EXTRA_STATUS, textViewStatus.getText().toString());
-                    mContext.startActivity(intent);
-                }
-            });
+            this.toDoItem = toDoItem;
+            binding.setToDoItem(toDoItem);
+            binding.executePendingBindings();
+            binding.setClickHandler(this);
         }
+
+        public void onItemClick(View view) {
+            Intent intent = new Intent(mContext, DetailsActivity.class);
+            intent.putExtra(INTENT_EXTRA_TO_DO_ITEM, toDoItem);
+            mContext.startActivity(intent);
+        }
+
     }
 }
