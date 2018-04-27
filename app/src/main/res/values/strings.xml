@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lear</string>
+    <string name="completed">Completed</string>
+    <string name="incomplete">Incomplete</string>
+</resources>
