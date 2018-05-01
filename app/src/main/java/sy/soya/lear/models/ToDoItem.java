@@ -1,23 +1,31 @@
 package sy.soya.lear.models;
 
-import android.databinding.Bindable;
-import android.databinding.PropertyChangeRegistry;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.android.databinding.library.baseAdapters.BR;
-
 import java.io.Serializable;
-import java.util.Observable;
 
-import sy.soya.lear.ui.helpers.BaseObservable;
-
-public class ToDoItem extends BaseObservable implements Parcelable {
+public class ToDoItem implements Parcelable {
 
     private int userId;
     private int id;
     private String title;
     private boolean completed;
+
+    public ToDoItem(int userId, int id, String title, boolean completed) {
+        this.userId = userId;
+        this.id = id;
+        this.title = title;
+        this.completed = completed;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public int getId() {
         return id;
@@ -27,17 +35,14 @@ public class ToDoItem extends BaseObservable implements Parcelable {
         this.id = id;
     }
 
-    @Bindable
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-        registry.notifyChange(this, BR.title);
     }
 
-    @Bindable
     public boolean isCompleted() {
         return completed;
     }
